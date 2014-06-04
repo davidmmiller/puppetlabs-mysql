@@ -25,6 +25,7 @@ class mysql::params {
   $client_dev_package_provider = undef
   $daemon_dev_package_ensure   = 'present'
   $daemon_dev_package_provider = undef
+  $prefer_mariadb              = false
 
 
   case $::osfamily {
@@ -127,8 +128,25 @@ class mysql::params {
     }
 
     'Debian': {
-      $client_package_name     = 'mysql-client'
-      $server_package_name     = 'mysql-server'
+      case $::operatingsystem {
+        'Ubuntu': {
+          if $::operatingsystemrelease >= 14.04 and $prefer_mariadb == true {
+            $provider = 'mariadb'
+          } else {
+            $provider = 'mysql'
+          }
+        }
+        default: {
+          $provider = 'mysql'
+        }
+      }
+      if $provider == 'mariadb' {
+        $client_package_name = 'mariadb-client'
+        $server_package_name = 'mariadb-server'
+      } else {
+        $client_package_name = 'mysql-client'
+        $server_package_name = 'mysql-server'
+      }
 
       $basedir                 = '/usr'
       $config_file             = '/etc/mysql/my.cnf'
