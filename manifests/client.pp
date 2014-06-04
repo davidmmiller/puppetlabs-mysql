@@ -3,6 +3,7 @@ class mysql::client (
   $bindings_enable = $mysql::params::bindings_enable,
   $package_ensure  = $mysql::params::client_package_ensure,
   $package_name    = $mysql::params::client_package_name,
+  $prefer_mariadb  = $mysql::params::prefer_mariadb,
 ) inherits mysql::params {
 
   include '::mysql::client::install'

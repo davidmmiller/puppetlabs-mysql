@@ -18,6 +18,7 @@ class mysql::server (
   $users                   = {},
   $grants                  = {},
   $databases               = {},
+  $prefer_mariadb          = $mysql::params::prefer_mariadb,
 
   # Deprecated parameters
   $enabled                 = undef,
